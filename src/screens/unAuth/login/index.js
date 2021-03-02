@@ -7,6 +7,7 @@ import {
   Radio,
   Spinner,
   Text,
+  Icon,
 } from '@ui-kitten/components';
 import React from 'react';
 import {
@@ -18,6 +19,7 @@ import {
   Dimensions,
   Keyboard,
   View,
+  TouchableWithoutFeedback,
 } from 'react-native';
 import {TOKEN} from '../../../asset/KeyStore';
 import {Post} from '../../../lib/networking';
@@ -31,11 +33,21 @@ export default function index({navigation}) {
   const [password, setPassword] = React.useState('');
   const [checked, setChecked] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+  const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
   const LoadingIndicator = (props) => (
     <View style={styles.spinner}>
-      <Spinner size="small" />
+      <Spinner size="small" status="danger" />
     </View>
+  );
+  const toggleSecureEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
+  const renderIcon = (props) => (
+    <TouchableWithoutFeedback onPress={toggleSecureEntry}>
+      <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
+    </TouchableWithoutFeedback>
   );
 
   const _onLogin = () => {
@@ -43,13 +55,16 @@ export default function index({navigation}) {
     Keyboard.dismiss();
     Post('auth/login', {email, password})
       .then((response) => {
-        console.log('__res: ', response);
         response.json().then(async (data) => {
-          console.log('___loginData: ', data);
-          let token = await JSON.stringify(data.access_token);
-          await AsyncStorage.setItem(TOKEN, token);
-          setLoading(false);
-          navigation.navigate('Home');
+          if (data.message) {
+            setError(true);
+          } else {
+            let token = await JSON.stringify(data.access_token);
+            await AsyncStorage.setItem(TOKEN, token);
+            setLoading(false);
+            setError(false);
+            navigation.navigate('Home');
+          }
         });
       })
       .catch((error) => {
@@ -68,23 +83,31 @@ export default function index({navigation}) {
             <Image source={background} style={styles.background} />
             <Layout style={styles.login}>
               <Text style={styles.title}>Đăng nhập</Text>
-              <Text style={styles.text}>
-                Vui lòng đăng nhập tài khoản để sử dụng ứng dụng
-              </Text>
+              {!error ? (
+                <Text style={styles.text}>
+                  Vui lòng đăng nhập tài khoản để sử dụng ứng dụng
+                </Text>
+              ) : (
+                <Text style={[styles.text, {color: 'red'}]}>
+                  Sai thông tin đăng nhập
+                </Text>
+              )}
               <Input
                 style={styles.input}
                 size="large"
-                status="primary"
+                status={!error ? 'primary' : 'danger'}
                 placeholder="Email ..."
                 value={email}
                 onChangeText={(email) => setEmail(email)}
               />
               <Input
-                style={styles.input}
                 size="large"
-                status="primary"
-                placeholder="Password ..."
+                style={styles.input}
+                status={!error ? 'primary' : 'danger'}
                 value={password}
+                placeholder="Password ..."
+                accessoryRight={renderIcon}
+                secureTextEntry={secureTextEntry}
                 onChangeText={(password) => setPassword(password)}
               />
               <Layout style={styles.view2}>

@@ -67,4 +67,5 @@ export const styles = StyleSheet.create({
   sign_in_text: {
     textDecorationLine: 'underline',
   },
+  spinner: {alignItems: 'center', justifyContent: 'center'},
 });

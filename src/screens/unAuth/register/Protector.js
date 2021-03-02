@@ -2,6 +2,7 @@ import {
   Button,
   Input,
   Layout,
+  Spinner,
   Text,
   useStyleSheet,
 } from '@ui-kitten/components';
@@ -13,6 +14,7 @@ import {
   Dimensions,
   Platform,
   ScrollView,
+  View,
 } from 'react-native';
 
 import background from '../../../asset/image/background.jpg';
@@ -73,9 +75,35 @@ export default function Protector({navigation}) {
       marginTop: 5,
       width: Width - 40,
     },
+    spinner: {alignItems: 'center', justifyContent: 'center'},
   });
 
   const [protectedCode, setProtectedCode] = React.useState('');
+  const [loading, setLoading] = React.useState(false);
+  const [error, setError] = React.useState(false);
+
+  const LoadingIndicator = (props) => (
+    <View style={styles.spinner}>
+      <Spinner size="small" status="danger" />
+    </View>
+  );
+
+  const _onContinue = () => {
+    setLoading(true);
+    let t = setTimeout(() => {
+      if (protectedCode === '123456') {
+        navigation.navigate('Register', {code: protectedCode});
+        setProtectedCode('');
+        setLoading(false);
+        setError(false);
+      } else {
+        setError(true);
+        setLoading(false);
+        setProtectedCode('');
+      }
+      clearTimeout(t);
+    }, 2000);
+  };
 
   return (
     <Layout style={styles.container}>
@@ -94,8 +122,8 @@ export default function Protector({navigation}) {
               <Input
                 style={styles.input}
                 size="large"
-                status="primary"
-                placeholder="Code ..."
+                status={!error ? 'primary' : 'danger'}
+                placeholder={!error ? 'Code ...' : 'Code sai !!!'}
                 value={protectedCode}
                 onChangeText={(code) => setProtectedCode(code)}
               />
@@ -103,9 +131,8 @@ export default function Protector({navigation}) {
               <Button
                 style={styles.button}
                 size="giant"
-                onPress={() => {
-                  navigation.navigate('Register');
-                }}>
+                accessoryRight={loading ? LoadingIndicator : null}
+                onPress={_onContinue}>
                 Tiếp tục
               </Button>
             </Layout>

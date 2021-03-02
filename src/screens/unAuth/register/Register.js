@@ -1,8 +1,10 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   Button,
   Icon,
   Input,
   Layout,
+  Spinner,
   Text,
   useStyleSheet,
 } from '@ui-kitten/components';
@@ -15,13 +17,16 @@ import {
   SafeAreaView,
   Platform,
   TouchableWithoutFeedback,
+  View,
 } from 'react-native';
+import {Post} from '../../../lib/networking';
+import {TOKEN} from '../../../asset/KeyStore';
 
 import background from '../../../asset/image/background.jpg';
 const Width = Dimensions.get('screen').width;
 const Height = Dimensions.get('screen').height;
 
-export default function Register({navigation}) {
+export default function Register({route, navigation}) {
   const styles = useStyleSheet({
     container: {
       flex: 1,
@@ -77,14 +82,23 @@ export default function Register({navigation}) {
       textDecorationLine: 'underline',
       color: '#2690D6',
     },
+    spinner: {alignItems: 'center', justifyContent: 'center'},
   });
 
-  const [protectedCode, setProtectedCode] = React.useState('123456789');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
-  const [confirmPass, setConfirmPass] = React.useState('');
+  const [password_confirmation, setConfirmPass] = React.useState('');
   const [secureTextEntry, setSecureTextEntry] = React.useState(true);
+  const [error, setError] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
+  const {code} = route.params;
+
+  const LoadingIndicator = (props) => (
+    <View style={styles.spinner}>
+      <Spinner size="small" status="danger" />
+    </View>
+  );
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
   };
@@ -93,6 +107,28 @@ export default function Register({navigation}) {
       <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'} />
     </TouchableWithoutFeedback>
   );
+
+  const _onRegister = () => {
+    setLoading(true);
+    Post('auth/register', {email, password, password_confirmation})
+      .then((response) => {
+        response.json().then(async (data) => {
+          if (data.message) {
+            setLoading(false);
+            setError(true);
+          } else {
+            let token = await JSON.stringify(data.access_token);
+            await AsyncStorage.setItem(TOKEN, token);
+            setLoading(true);
+            setError(false);
+            navigation.navigate('Home');
+          }
+        });
+      })
+      .catch((e) => {
+        console.log('_err: ', e);
+      });
+  };
 
   return (
     <Layout style={styles.container}>
@@ -104,21 +140,26 @@ export default function Register({navigation}) {
             <Image source={background} style={styles.background} />
             <Layout style={styles.form_layout}>
               <Text style={styles.title}>Đăng ký</Text>
-              <Text style={styles.text}>
-                Vui lòng nhập thông tin cơ bản để hoàn thành đăng ký
-              </Text>
+              {!error ? (
+                <Text style={styles.text}>
+                  Vui lòng nhập thông tin cơ bản để hoàn thành đăng ký
+                </Text>
+              ) : (
+                <Text style={[styles.text, {color: 'red'}]}>
+                  Email đã tồn tại
+                </Text>
+              )}
               <Input
                 style={styles.input}
                 size="large"
                 status="primary"
                 disabled={true}
-                value={protectedCode}
-                // onChangeText={(code) => setProtectedCode(code)}
+                value={code}
               />
               <Input
                 style={styles.input}
                 size="large"
-                status="primary"
+                status={!error ? 'primary' : 'danger'}
                 placeholder="Email ..."
                 value={email}
                 onChangeText={(email) => setEmail(email)}
@@ -137,7 +178,7 @@ export default function Register({navigation}) {
                 size="large"
                 style={styles.input}
                 status="primary"
-                value={confirmPass}
+                value={password_confirmation}
                 placeholder="Confirm Pass ..."
                 accessoryRight={renderIcon}
                 secureTextEntry={secureTextEntry}
@@ -146,9 +187,8 @@ export default function Register({navigation}) {
               <Button
                 style={styles.button}
                 size="giant"
-                onPress={() => {
-                  console.log('___continue');
-                }}>
+                accessoryRight={loading ? LoadingIndicator : null}
+                onPress={_onRegister}>
                 Đăng ký
               </Button>
               <Text style={styles.text}>
