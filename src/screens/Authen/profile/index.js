@@ -1,11 +1,11 @@
 import {Layout, Text} from '@ui-kitten/components';
 import React from 'react';
-// import { } from 'react-native'
+import {} from 'react-native';
 
-export default function Header() {
+export default function index() {
   return (
     <Layout>
-      <Text>abc</Text>
+      <Text>Profile</Text>
     </Layout>
   );
 }
