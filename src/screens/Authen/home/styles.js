@@ -9,7 +9,7 @@ export const styles = StyleSheet.create({
   background: {
     height: 120,
     width: Width,
-    backgroundColor: '#2BBAD4',
+    backgroundColor: '#78C9FF',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
   },
@@ -61,30 +61,57 @@ export const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   link_item: {
-    height: 80,
     width: (Width - 50) / 2,
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 20,
     margin: 5,
+    paddingVertical: 20,
+  },
+  white: {
+    fontSize: 16,
+    color: 'white',
   },
   med_icon: {
     width: 30,
     height: 30,
+    color: 'white',
+    zIndex: 10,
   },
   layout_list: {
+    marginTop: 20,
     width: Width - 40,
   },
-  list_header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  list_title: {
+    marginVertical: 10,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   list_item: {
     marginTop: 5,
   },
   link: {
     color: 'blue',
+    textDecorationLine: 'underline',
+  },
+  list_header: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 10,
+  },
+  list_header_title: {
+    width: Width * 0.25,
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  btn_more: {
+    textAlign: 'center',
+    marginTop: 10,
+    marginBottom: 40,
+    color: 'blue',
+    fontSize: 18,
     textDecorationLine: 'underline',
   },
 });

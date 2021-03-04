@@ -2,11 +2,9 @@
 import {Layout, List, Text, useStyleSheet} from '@ui-kitten/components';
 import React from 'react';
 import {Dimensions} from 'react-native';
-import Header from '../../../components/Header';
-import ListItem from './component/ListItem';
+import ListItem from '../../news/component/ListItem';
 
 const Width = Dimensions.get('screen').width;
-const Height = Dimensions.get('screen').height;
 
 const data = new Array(20).fill({
   date: 'dd/mm/yyyy',
@@ -14,49 +12,25 @@ const data = new Array(20).fill({
   out: '3.000.000',
 });
 
-export default function index({navigation}) {
+export default function index() {
   const styles = useStyleSheet({
-    container: {
-      flex: 1,
-    },
-    background: {
-      height: Height,
-      width: Width,
-      backgroundColor: '#78C9FF',
-    },
-    layout_header: {
+    container: {flex: 1},
+    form: {
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      position: 'absolute',
-      top: 70,
-      height: 20,
-      width: Width,
-      zIndex: 1,
-      backgroundColor: 'transparent',
-      paddingHorizontal: 20,
+      marginTop: 5,
     },
-    header_title: {
-      color: 'white',
-      fontSize: 16,
+    form_title: {
+      width: Width * 0.3,
+      paddingHorizontal: 20,
+      paddingVertical: 5,
+    },
+    form_des: {
+      width: Width * 0.7,
+      paddingHorizontal: 20,
+      paddingVertical: 5,
     },
     layout_list: {
-      position: 'absolute',
-      top: 100,
-      // left: 20,
-      width: Width,
-      height: Height * 0.7,
-      // borderTopRightRadius: 20,
-      // borderTopLeftRadius: 20,
-      paddingVertical: 20,
-    },
-    button: {
-      position: 'absolute',
-      bottom: 10,
-      right: 10,
-      zIndex: 10,
-    },
-    header_link: {
-      textDecorationLine: 'underline',
+      marginTop: 20,
     },
     list_header: {
       flexDirection: 'row',
@@ -72,8 +46,7 @@ export default function index({navigation}) {
     },
     btn_more: {
       textAlign: 'center',
-      marginTop: 10,
-      marginBottom: 40,
+      marginVertical: 10,
       color: 'blue',
       fontSize: 18,
       textDecorationLine: 'underline',
@@ -84,11 +57,29 @@ export default function index({navigation}) {
 
   return (
     <Layout style={styles.container}>
-      <Header navigation={navigation} />
-      <Layout style={styles.background} />
-      <Layout style={styles.layout_header}>
-        <Text style={styles.header_title}>Lịch sử giao dịch</Text>
-        <Text style={[styles.header_link, styles.header_title]}>Lọc</Text>
+      <Layout style={styles.form}>
+        <Text style={styles.form_title}>Họ tên:</Text>
+        <Text style={styles.form_des}>Phạm Văn Độ</Text>
+      </Layout>
+      <Layout style={styles.form}>
+        <Text style={styles.form_title}>Email:</Text>
+        <Text style={styles.form_des}>dopv@vicoders.com</Text>
+      </Layout>
+      <Layout style={styles.form}>
+        <Text style={styles.form_title}>Địa chỉ: </Text>
+        <Text style={styles.form_des}>Nam Tiến, Nam Trực, Nam Định</Text>
+      </Layout>
+      <Layout style={styles.form}>
+        <Text style={styles.form_title}>Số tài khoản:</Text>
+        <Text style={styles.form_des}>0123456789</Text>
+      </Layout>
+      <Layout style={styles.form}>
+        <Text style={styles.form_title}>ID:</Text>
+        <Text style={styles.form_des}>654321</Text>
+      </Layout>
+      <Layout style={styles.form}>
+        <Text style={styles.form_title}>Loại tiền:</Text>
+        <Text style={styles.form_des}>VND</Text>
       </Layout>
       <List
         style={styles.layout_list}

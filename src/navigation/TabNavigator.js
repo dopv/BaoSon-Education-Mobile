@@ -3,9 +3,9 @@ import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import HomeScreen from '../screens/Authen/home/index';
+import HomeStack from '../screens/Authen/home/HomeStack';
 import NewsScreen from '../screens/Authen/news/index';
-import ProfileScreen from '../screens/Authen/profile/index';
+import ProfileScreen from '../screens/Authen/profile/ProfileStack';
 import NotifyScreen from '../screens/Authen/notify/index';
 
 import {
@@ -32,9 +32,9 @@ export default function TabNavigator() {
   );
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="HomeStack"
       tabBar={(props) => <BottomTabBar {...props} />}>
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="HomeStack" component={HomeStack} />
       <Tab.Screen name="News" component={NewsScreen} />
       <Tab.Screen name="Notify" component={NotifyScreen} />
       <Tab.Screen name="Auth" component={ProfileScreen} />

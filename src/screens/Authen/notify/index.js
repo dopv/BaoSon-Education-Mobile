@@ -13,7 +13,7 @@ const data = new Array(20).fill({
   time: '10 phút trước',
 });
 
-export default function index() {
+export default function index({navigation}) {
   const styles = useStyleSheet({
     container: {
       flex: 1,
@@ -21,7 +21,7 @@ export default function index() {
     background: {
       height: Height,
       width: Width,
-      backgroundColor: '#2BB7CD',
+      backgroundColor: '#78C9FF',
     },
     layout_header: {
       flexDirection: 'row',
@@ -43,8 +43,7 @@ export default function index() {
       top: 100,
       // left: 20,
       width: Width,
-      height: Height * 0.65,
-      borderRadius: 20,
+      height: Height * 0.7,
       padding: 20,
       shadowColor: '#000',
       shadowOffset: {
@@ -65,19 +64,34 @@ export default function index() {
     header_link: {
       textDecorationLine: 'underline',
     },
+    btn_more: {
+      textAlign: 'center',
+      marginTop: 10,
+      marginBottom: 40,
+      color: 'blue',
+      fontSize: 18,
+      textDecorationLine: 'underline',
+    },
   });
 
   const renderItem = ({item, index}) => <ListItem item={item} index={index} />;
 
   return (
     <Layout style={styles.container}>
-      <Header />
+      <Header navigation={navigation} />
       <Layout style={styles.background} />
       <Layout style={styles.layout_header}>
         <Text style={styles.header_title}>Thông báo của bạn</Text>
         <Text style={[styles.header_link, styles.header_title]}>xem thêm</Text>
       </Layout>
-      <List style={styles.layout_list} data={data} renderItem={renderItem} />
+      <List
+        style={styles.layout_list}
+        data={data}
+        ListFooterComponent={() => (
+          <Text style={styles.btn_more}>Xem thêm</Text>
+        )}
+        renderItem={renderItem}
+      />
     </Layout>
   );
 }

@@ -63,7 +63,7 @@ export default function index({navigation}) {
             await AsyncStorage.setItem(TOKEN, token);
             setLoading(false);
             setError(false);
-            navigation.navigate('Home');
+            navigation.navigate('Drawer');
           }
         });
       })
