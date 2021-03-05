@@ -24,9 +24,21 @@ export default function HomeStack() {
         component={Home}
         options={{headerShown: false}}
       />
-      <Stack.Screen name="Exchange" component={Exchange} />
-      <Stack.Screen name="Member" component={MemberScreen} />
-      <Stack.Screen name="OrgChart" component={OrgChart} />
+      <Stack.Screen
+        name="Exchange"
+        component={Exchange}
+        options={{title: 'Giao dịch'}}
+      />
+      <Stack.Screen
+        name="Member"
+        component={MemberScreen}
+        options={{title: 'Danh sách thành viên'}}
+      />
+      <Stack.Screen
+        name="OrgChart"
+        component={OrgChart}
+        options={{title: 'Cây gia phả'}}
+      />
     </Stack.Navigator>
   );
 }
